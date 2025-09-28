@@ -6,7 +6,7 @@ from password_stretcher.lib.mutator import Mutator
 
 
 class Cap(Mutator):
-
+    """Capitalize words in various ways."""
     # roughly the number of capital mutations when capswap is disabled
     cap_multiplier = 4
     scale = 2
@@ -24,11 +24,10 @@ class Cap(Mutator):
 
         if not self.capswap:
             return self.cap_multiplier
-        else:
-            return self.limit
+        return self.limit
 
 
-    def mutate(self, word):
+    def mutate(self, word: str):
 
         # always yield the most likely candidates first
         results = []
@@ -40,7 +39,7 @@ class Cap(Mutator):
         # then move on to full cap mutations if requested
         if self.capswap:
             for r in self._capswap(word):
-                if not r in results:
+                if r not in results:
                     yield r
 
 

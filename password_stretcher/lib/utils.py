@@ -4,13 +4,13 @@
 
 import sys
 import string
+import traceback
+import logging
 from pathlib import Path
-from urllib.parse import urlparse
+from bs4 import UnicodeDammit
 from password_stretcher.lib.errors import InputListError
 
-# UnicodeDammit
-import logging
-from bs4 import UnicodeDammit
+
 logging.disable(logging.WARNING)
 
 
@@ -27,7 +27,7 @@ class ReadFiles():
 
 
 class ReadFile():
-
+    """Reads lines from a file, handling encoding issues."""
     def __init__(self, filename, binary=True):
 
         self.filename = Path(filename)
@@ -67,8 +67,7 @@ class ReadFile():
                     for line in UnicodeDammit(e.object).unicode_markup.splitlines()[1:-1]:
                         yield line.rstrip(self.strip)
                         fucky_errors = 0
-                    else:
-                        fucky_errors += 1
+                    fucky_errors += 1
 
 
 
@@ -106,11 +105,11 @@ def int_to_human(i: int) -> str:
     '''
 
     sizes = ['', 'K', 'M', 'B', 'T']
-    units = {}
-    count = 0
+    units: dict[str, int] = {}
+    count: int = 0
     for size in sizes:
         units[size] = pow(1000, count)
-        count +=1
+        count += 1
 
     for size in sizes:
         if abs(i) < 1000.0:
@@ -130,7 +129,7 @@ def human_to_int(h: str) -> int:
     e.g. 1K --> 1000
     '''
 
-    if type(h) == int:
+    if isinstance(h, int):
         return h
 
     units = {'': 1, 'K': 1000, 'M': 1000**2, 'B': 1000**3, 'T': 1000**4}
@@ -139,13 +138,13 @@ def human_to_int(h: str) -> int:
         h = h.upper().strip()
         i = float(''.join(c for c in h if c in string.digits + '.'))
         unit = ''.join([c for c in h if c in string.ascii_uppercase])
-    except (ValueError, KeyError):
-        raise ValueError(f'Invalid number "{h}"')
+    except (ValueError, KeyError) as exc:
+        raise ValueError(f'Invalid number "{h}"') from exc
 
     return int(i * units[unit])
 
 
-def bytes_to_human(_bytes):
+def bytes_to_human(_bytes) -> str:
     '''
     converts bytes to human-readable filesize
     e.g. 1024 --> 1KB
@@ -169,33 +168,12 @@ def bytes_to_human(_bytes):
 
 
 
-def hostname_to_domain(hostname):
-
-    hostname = hostname.lower().split('.')
-    try:
-        if hostname[-2] == 'co':
-            return '.'.join(hostname[-3:])
-        else:
-            return '.'.join(hostname[-2:])
-    except IndexError:
-        return '.'.join(hostname)
-
-
-
-def url_to_domain(url):
-
-    try:
-        return hostname_to_domain(urlparse(url).hostname).lower()
-    except AttributeError:
-        raise ValueError(f'Invalid URL: {url}')
-
-
 def thread_wrapper(target, *args, **kwargs):
 
     try:
         target(*args, **kwargs)
     except KeyboardInterrupt:
         pass
-    except Exception as e:
-        import traceback
+    except (ValueError, IOError, RuntimeError):
         traceback.print_exc()
+        

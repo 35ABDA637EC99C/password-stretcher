@@ -2,11 +2,11 @@
 
 # by TheTechromancer
 
-from .cap import Cap
-from .leet import Leet
-from .pend import Pend
-from .perm import Perm
-from .deconstruct import Deconstruct
+from password_stretcher.lib.cap import Cap
+from password_stretcher.lib.leet import Leet
+from password_stretcher.lib.pend import Pend
+from password_stretcher.lib.perm import Perm
+from password_stretcher.lib.deconstruct import Deconstruct
 from functools import reduce
 
 class Mangler():

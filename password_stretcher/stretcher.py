@@ -6,10 +6,9 @@ import os
 import re
 import sys
 import argparse
-from password_stretcher.lib.utils import *
-from password_stretcher.lib.errors import *
-from password_stretcher.lib.mangler import *
-from password_stretcher.lib.spider import Spider
+from password_stretcher.lib.utils import ReadSTDIN, read_uris, human_to_int, bytes_to_human
+from password_stretcher.lib.errors import PasswordStretcherError
+from password_stretcher.lib.mangler import Mangler
 from password_stretcher.lib.policy import PasswordPolicy
 
 
@@ -99,9 +98,6 @@ def main():
     filters.add_argument('--mincharsets', type=int, metavar='3', help='must have this many character sets')
     filters.add_argument('--charsets', nargs='+', choices=PasswordPolicy.charset_choices, help='must include these character sets')
     filters.add_argument('--regex', type=re.compile, metavar='\'$[a-z]*^\'', help='custom regex')
-    spidering = argparse.ArgumentParser.add_argument_group(parser, 'spider options')
-    spidering.add_argument('--spider-depth', type=int, default=1, help='maximum website spider depth (default: 1)')
-    spidering.add_argument('--user-agent', help='user-agent for web spider')
 
     try:
 
@@ -116,11 +112,6 @@ def main():
         if not type(options.input) == ReadSTDIN:
             options.input = read_uris(options.input)
 
-        if type(options.input) == Spider:
-            spider = options.input
-            spider.depth = options.spider_depth
-            spider.user_agent = options.user_agent
-            spider.start()
 
         stretcher(options)
 

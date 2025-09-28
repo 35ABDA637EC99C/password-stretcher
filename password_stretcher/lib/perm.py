@@ -3,7 +3,7 @@
 # by TheTechromancer
 
 import itertools
-from .mutator import Mutator
+from password_stretcher.lib.mutator import Mutator
 
 
 class Perm(Mutator):
@@ -26,7 +26,7 @@ class Perm(Mutator):
 
     def __len__(self):
 
-        length = len(self.input)
+        length: int = len(self.input)
 
         if self.perm_depth > 1:
             initial_length = len(self.input)

@@ -6,25 +6,12 @@ import sys
 import string
 from pathlib import Path
 from urllib.parse import urlparse
-from .errors import InputListError
+from password_stretcher.lib.errors import InputListError
 
 # UnicodeDammit
 import logging
 from bs4 import UnicodeDammit
 logging.disable(logging.WARNING)
-
-
-def read_uris(uris):
-
-    files = []
-    for uri in uris:
-        if any([uri.startswith(x) for x in ['http://', 'https://']]):
-            from .spider import Spider
-            return Spider(uri)
-        else:
-            files.append(uri)
-
-    return ReadFiles(*files)
 
 
 class ReadFiles():
@@ -112,7 +99,7 @@ class ReadSTDIN():
 
 
 
-def int_to_human(i):
+def int_to_human(i: int) -> str:
     '''
     shortens large integer to human-readable format
     e.g. 1000 --> 1K
@@ -137,7 +124,7 @@ def int_to_human(i):
     raise ValueError
 
 
-def human_to_int(h):
+def human_to_int(h: str) -> int:
     '''
     converts human-readable number to integer
     e.g. 1K --> 1000

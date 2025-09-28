@@ -3,7 +3,7 @@
 # by TheTechromancer
 
 import re
-from .mutator import Mutator
+from password_stretcher.lib.mutator import Mutator
 
 
 class Deconstruct(Mutator):

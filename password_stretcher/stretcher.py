@@ -18,7 +18,7 @@ def stretcher(options):
     if options.minlength is not None and options.maxlength is not None:
         if options.minlength > options.maxlength:
             print('U WOT M8')
-            sys.exit()
+            sys.exit(1)
 
     show_written_count = not sys.stdout.isatty()
     written_count = 0
@@ -76,7 +76,6 @@ def stretcher(options):
         sys.stderr.write(f'\r[+] {written_count:,} words written ({bytes_to_human(bytes_written)})    \n')
 
     sys.stdout.buffer.flush()
-    sys.stdout.close()
 
 
 def main():

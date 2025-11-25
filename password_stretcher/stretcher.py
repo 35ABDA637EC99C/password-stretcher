@@ -57,7 +57,7 @@ def stretcher(options):
 
     #sys.stderr.write(f'[+] Estimated output: {len(mangler):,} words\n')
 
-    bytes_written = 0
+    bytes_written: int = 0
     for mangled_word in mangler:
 
         if policy.meets_policy(mangled_word):

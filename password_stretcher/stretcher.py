@@ -60,6 +60,7 @@ def stretcher(options):
 
     bytes_written: int = 0
     previous_bytes_written: int = 0
+    print(f"Mangled words: {len(mangler)}")
 
     for mangled_word in mangler:
         time_start = time.time()
@@ -75,9 +76,9 @@ def stretcher(options):
 
         else:
             # if the word didn't meet length requirements, increase the limit by 1
-            mangler.mutators[-1].cur_limit += 1
-        time_end = time.time()
+            mangler.mutators[-1].cur_limit += 1        
         if bytes_written == previous_bytes_written and bytes_written > 10:
+            time_end = time.time()
             sys.stderr.write(f'\r[!] No new words written in the last {time_end - time_start:.2f} seconds. Quiting.\n')
             exit(0)  # exit if no new words were written in the last second
     if show_written_count:

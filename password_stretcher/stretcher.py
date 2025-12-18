@@ -60,7 +60,7 @@ def stretcher(options):
 
     bytes_written: int = 0
     previous_bytes_written: int = 0
-    print(f"Mangled words: {len(mangler)}")
+    print(f"Mangled words: {len(mangler):,}", file=sys.stderr)
 
     for mangled_word in mangler:
         time_start = time.time()

@@ -77,7 +77,7 @@ def stretcher(options):
             # if the word didn't meet length requirements, increase the limit by 1
             mangler.mutators[-1].cur_limit += 1
         time_end = time.time()
-        if time_end - time_start < 1 and bytes_written == previous_bytes_written:
+        if time_end - time_start < 300 and bytes_written == previous_bytes_written:
             sys.stderr.write(f'\r[!] No new words written in the last {time_end - time_start:.2f} seconds. Quiting.\n')
             exit(0)  # exit if no new words were written in the last second
     if show_written_count:

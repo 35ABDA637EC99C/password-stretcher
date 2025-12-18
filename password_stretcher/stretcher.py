@@ -6,6 +6,7 @@ import os
 import re
 import sys
 import argparse
+import time
 from password_stretcher.lib.utils import ReadSTDIN, human_to_int, bytes_to_human
 from password_stretcher.lib.errors import PasswordStretcherError
 from password_stretcher.lib.mangler import Mangler
@@ -58,11 +59,15 @@ def stretcher(options):
     #sys.stderr.write(f'[+] Estimated output: {len(mangler):,} words\n')
 
     bytes_written: int = 0
-    for mangled_word in mangler:
+    previous_bytes_written: int = 0
 
+    for mangled_word in mangler:
+        time_start = time.time()
         if policy.meets_policy(mangled_word):
             sys.stdout.buffer.write(mangled_word + b'\n')
+            previous_bytes_written = bytes_written
             bytes_written += (len(mangled_word)+1)
+
             if show_written_count and written_count % 10000 == 0:
                 sys.stderr.write(f'\r[+] {written_count:,} words written ({bytes_to_human(bytes_written)})    ')
 
@@ -71,7 +76,10 @@ def stretcher(options):
         else:
             # if the word didn't meet length requirements, increase the limit by 1
             mangler.mutators[-1].cur_limit += 1
-
+        time_end = time.time()
+        if time_end - time_start < 1 and bytes_written == previous_bytes_written:
+            sys.stderr.write(f'\r[!] No new words written in the last {time_end - time_start:.2f} seconds. Quiting.\n')
+            exit(0)  # exit if no new words were written in the last second
     if show_written_count:
         sys.stderr.write(f'\r[+] {written_count:,} words written ({bytes_to_human(bytes_written)})    \n')
 

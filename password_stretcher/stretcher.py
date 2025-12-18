@@ -60,7 +60,8 @@ def stretcher(options):
 
     bytes_written: int = 0
     previous_bytes_written: int = 0
-    print(f"Mangled words: {len(mangler):,}", file=sys.stderr)
+    max_size: int = mangler.output_size if mangler.output_size else int(7)
+    sys.stderr.write(f'[+] Generating stretched password list (max {max_size:,} words)...\n')
 
     for mangled_word in mangler:
         time_start = time.time()

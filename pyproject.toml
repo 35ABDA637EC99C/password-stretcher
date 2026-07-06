@@ -1,17 +1,17 @@
 [tool.poetry]
 name = "password-stretcher"
-version = "1.0.6"
+version = "1.0.7"
 description = "A deadly password mangler"
 authors = ["TheTechromancer"]
 license = "GPL-3.0"
-repository = "https://github.com/TheTechromancer/password-stretcher"
-homepage = "https://github.com/TheTechromancer/password-stretcher"
+repository = "https://github.com/35ABDA637EC99C/password-stretcher"
+homepage = "https://github.com/35ABDA637EC99C/password-stretcher"
 
 [tool.poetry.scripts]
 password-stretcher = 'password_stretcher.stretcher:main'
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.12"
 requests = "^2.25.1"
 beautifulsoup4 = "^4.9.3"
 

@@ -6,7 +6,6 @@ import os
 import re
 import sys
 import argparse
-import time
 from password_stretcher.lib.utils import ReadSTDIN, human_to_int, bytes_to_human
 from password_stretcher.lib.errors import PasswordStretcherError
 from password_stretcher.lib.mangler import Mangler
@@ -75,7 +74,7 @@ def stretcher(options):
             # if the word didn't meet length requirements, increase the limit by 1
             mangler.mutators[-1].cur_limit += 1        
         if wordcounter >= max_size:
-            sys.stderr.write(f'\r[!] Reached the end. Quiting.\n')
+            sys.stderr.write('\r[!] Reached the end. Quiting.\n')
             exit(0)  # exit if no new words were written in the last second
     if show_written_count:
         sys.stderr.write(f'\r[+] {written_count:,} words written ({bytes_to_human(bytes_written)})    \n')

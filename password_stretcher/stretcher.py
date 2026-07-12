@@ -57,9 +57,9 @@ def stretcher(options):
 
     #sys.stderr.write(f'[+] Estimated output: {len(mangler):,} words\n')
 
-    bytes_written: int = 0
-    wordcounter: int = 0
-    max_size: int = mangler.output_size if mangler.output_size else int(7)
+    bytes_written = 0
+    wordcounter = 0
+    max_size = mangler.output_size if mangler.output_size else int(7)
 
     for mangled_word in mangler:
         wordcounter += 1

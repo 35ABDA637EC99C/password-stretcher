@@ -64,8 +64,15 @@ def stretcher(options):
     for mangled_word in mangler:
         wordcounter += 1
         if policy.meets_policy(mangled_word):
-            sys.stdout.buffer.write(mangled_word + b'\n')
-            bytes_written += (len(mangled_word)+1)
+            if isinstance(mangled_word, bytes):
+                output_word = mangled_word
+            elif isinstance(mangled_word, str):
+                output_word = mangled_word.encode('utf-8', errors='replace')
+            else:
+                output_word = str(mangled_word).encode('utf-8', errors='replace')
+
+            sys.stdout.buffer.write(output_word + b'\n')
+            bytes_written += (len(output_word) + 1)
 
             if show_written_count and written_count % 10000 == 0:
                 sys.stderr.write(f'\r[+] {written_count:,} words written ({bytes_to_human(bytes_written)})    ')

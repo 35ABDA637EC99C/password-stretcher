@@ -62,7 +62,7 @@ class Mangler():
         '''
         Estimates the total output length based on requested mangling parameters
         '''
-
+        length = 1
         for m in self.mutators:
             length *= len(m)
 

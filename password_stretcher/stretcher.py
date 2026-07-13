@@ -54,6 +54,9 @@ def stretcher(options):
     bytes_written = 0
     wordcounter = 0
     max_size = mangler.output_size if mangler.output_size else int(7)
+    output_buffer = []
+    output_buffer_bytes = 0
+    flush_threshold = 1_000_000
 
     for mangled_word in mangler:
         wordcounter += 1
@@ -65,17 +68,27 @@ def stretcher(options):
             else:
                 output_word = str(mangled_word).encode('utf-8', errors='replace')
 
-            sys.stdout.buffer.write(output_word + b'\n')
-            bytes_written += (len(output_word) + 1)
+            line = output_word + b'\n'
+            output_buffer.append(line)
+            output_buffer_bytes += len(line)
+            bytes_written += len(line)
+
+            if output_buffer_bytes >= flush_threshold:
+                sys.stdout.buffer.write(b''.join(output_buffer))
+                output_buffer = []
+                output_buffer_bytes = 0
 
         else:
             # if the word didn't meet length requirements, increase the limit by 1
             mangler.mutators[-1].cur_limit += 1        
         if wordcounter >= max_size:
+            if output_buffer:
+                sys.stdout.buffer.write(b''.join(output_buffer))
             sys.stderr.write('\r[!] Reached the end. Quiting.\n')
             exit(0)  # exit if no new words were written in the last second
 
-
+    if output_buffer:
+        sys.stdout.buffer.write(b''.join(output_buffer))
     sys.stdout.buffer.flush()
 
 
@@ -99,7 +112,6 @@ def main():
     try:
 
         options = parser.parse_args()
-
         if not isinstance(options.input, ReadSTDIN):
             options.input = ReadFiles(*options.input)
 
@@ -108,7 +120,6 @@ def main():
             parser.print_help()
             sys.stderr.write('\n\n[!] Please specify wordlist(s) or pipe to STDIN\n')
             exit(2)
-
         # If input is not ReadSTDIN, process as needed (removed read_uris call)
         # You may need to implement your own URI reading logic here if required.
 

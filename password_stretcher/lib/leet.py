@@ -2,6 +2,7 @@
 
 # by TheTechromancer
 
+import itertools
 from password_stretcher.lib.mutator import Mutator
 
 
@@ -52,9 +53,37 @@ class Leet(Mutator):
 
 
     def mutate(self, word):
-
-        for r in self._leet(word, swap_values=self.leet_common):
+        for r in self._leet_fast(word, swap_values=self.leet_common):
             yield r
+
+
+    def _leet_fast(self, word, swap_values=None):
+
+        if not swap_values:
+            swap_values = self.leet_all
+
+        # Build per-character choices first, then expand once.
+        # This avoids deep recursion and repeated list slicing.
+        options = []
+        if isinstance(word, bytes):
+            for char in word:
+                byte = bytes([char])
+                row = [byte]
+                row.extend(swap_values.get(byte, []))
+                options.append(row)
+
+            for combo in itertools.product(*options):
+                yield b''.join(combo)
+        else:
+            encoded = word.encode('utf-8', errors='replace')
+            for char in encoded:
+                byte = bytes([char])
+                row = [byte]
+                row.extend(swap_values.get(byte, []))
+                options.append(row)
+
+            for combo in itertools.product(*options):
+                yield b''.join(combo).decode('utf-8', errors='replace')
 
 
 

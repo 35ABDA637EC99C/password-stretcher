@@ -23,9 +23,6 @@ def stretcher(options):
     policy = PasswordPolicy(
         minlength=options.minlength,
         maxlength=options.maxlength,
-        mincharsets=options.mincharsets,
-        required_charsets=options.charsets,
-        regex=options.regex,
     )
 
     sys.stderr.write('[+] Reading input wordlist...')

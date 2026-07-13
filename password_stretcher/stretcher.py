@@ -107,7 +107,7 @@ def main():
     mangling.add_argument('-P', '--permutations',type=int, default=1, help='max permutation depth (careful! massive output)', metavar='INT')
     filters = argparse.ArgumentParser.add_argument_group(parser, 'password complexity filters')
     filters.add_argument('--minlength', type=int, metavar='8', help='minimum password length')
-    filters.add_argument('--maxlength', type=int, metavar='8', help='maximum password length')
+    filters.add_argument('--maxlength', type=int, metavar='16', help='maximum password length')
 
     try:
 

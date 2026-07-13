@@ -105,9 +105,6 @@ def main():
     filters = argparse.ArgumentParser.add_argument_group(parser, 'password complexity filters')
     filters.add_argument('--minlength', type=int, metavar='8', help='minimum password length')
     filters.add_argument('--maxlength', type=int, metavar='8', help='maximum password length')
-    filters.add_argument('--mincharsets', type=int, metavar='3', help='must have this many character sets')
-    filters.add_argument('--charsets', nargs='+', choices=PasswordPolicy.charset_choices, help='must include these character sets')
-    filters.add_argument('--regex', type=re.compile, metavar='\'$[a-z]*^\'', help='custom regex')
 
     try:
 

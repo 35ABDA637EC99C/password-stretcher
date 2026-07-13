@@ -3,10 +3,9 @@
 # by TheTechromancer
 
 import os
-import re
 import sys
 import argparse
-from password_stretcher.lib.utils import ReadSTDIN, human_to_int
+from password_stretcher.lib.utils import ReadFiles, ReadSTDIN, human_to_int
 from password_stretcher.lib.errors import PasswordStretcherError
 from password_stretcher.lib.mangler import Mangler
 from password_stretcher.lib.policy import PasswordPolicy
@@ -104,6 +103,9 @@ def main():
 
         options = parser.parse_args()
 
+        if not isinstance(options.input, ReadSTDIN):
+            options.input = ReadFiles(*options.input)
+
         # print help if there's nothing to stretch
         if isinstance(options.input, ReadSTDIN) and sys.stdin.isatty():
             parser.print_help()
@@ -117,10 +119,6 @@ def main():
         stretcher(options)
 
 
-    except re.error:
-        print('[!] Invalid regex')
-        print('[*] Remember to place regex in single quotes: \'^Password[0-9]+\'')
-        sys.exit(2)
     except BrokenPipeError:
         # Python flushes standard streams on exit; redirect remaining output
         # to devnull to avoid another BrokenPipeError at shutdown

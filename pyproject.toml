@@ -1,9 +1,10 @@
 [tool.poetry]
 name = "password-stretcher"
-version = "1.0.9"
+version = "1.0.10"
 description = "A deadly password mangler"
-authors = ["TheTechromancer"]
+authors = ["TheTechromancer", "35ABDA637EC99C"]
 license = "GPL-3.0"
+requires-python = ">=3.12"
 repository = "https://github.com/35ABDA637EC99C/password-stretcher"
 homepage = "https://github.com/35ABDA637EC99C/password-stretcher"
 

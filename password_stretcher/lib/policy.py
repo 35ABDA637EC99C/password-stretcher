@@ -43,9 +43,9 @@ class PasswordPolicy:
                     self.required_charset |= self.charset_flags[charset]
 
 
-    def meets_policy(self, password, pass_length=None, charset=None):
+    def meets_policy(self, password, pass_length=None, charset=None) -> bool:
 
-        if type(password) == bytes:
+        if isinstance(password, bytes):
             try:
                 password = password.decode()
             except UnicodeError:
@@ -68,7 +68,6 @@ class PasswordPolicy:
 
         # Character-set flags
         charset = 0b0000
-        required_charset = 0b0000
         simplemask = []
         advancedmask_string = []
 
@@ -79,25 +78,29 @@ class PasswordPolicy:
                 charset |= 0b0010
                 if calc_policy:
                     advancedmask_string.append('?l')
-                    if not simplemask or not simplemask[-1] == 'Word': simplemask.append('Word')
+                    if not simplemask or not simplemask[-1] == 'Word':
+                        simplemask.append('Word')
 
             elif letter.isdigit():
                 charset |= 0b0001
                 if calc_policy:
                     advancedmask_string.append('?d')
-                    if not simplemask or not simplemask[-1] == 'Number': simplemask.append('Number')
+                    if not simplemask or not simplemask[-1] == 'Number':
+                        simplemask.append('Number')
 
             elif letter.isupper():
                 charset |= 0b0100
                 if calc_policy:
                     advancedmask_string.append('?u')
-                    if not simplemask or not simplemask[-1] == 'Word': simplemask.append('Word')
+                    if not simplemask or not simplemask[-1] == 'Word':
+                        simplemask.append('Word')
 
             else:
                 charset |= 0b1000
                 if calc_policy:
                     advancedmask_string.append('?s')
-                    if not simplemask or not simplemask[-1] == 'Symbol': simplemask.append('Symbol')
+                    if not simplemask or not simplemask[-1] == 'Symbol':
+                        simplemask.append('Symbol')
 
         num_charsets = bin(charset).count('1')
         pass_length = len(password)

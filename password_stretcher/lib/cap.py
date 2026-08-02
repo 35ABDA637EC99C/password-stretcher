@@ -3,6 +3,7 @@
 # by TheTechromancer
 
 from password_stretcher.lib.mutator import Mutator
+import itertools
 
 
 class Cap(Mutator):
@@ -45,14 +46,22 @@ class Cap(Mutator):
 
     def _capswap(self, word):
 
-         # many recursions make light work
-        if len(word) == 1:
-            yield word
-            if word.isalpha():
-                yield word.swapcase()
-
+        if isinstance(word, bytes):
+            options = []
+            for char in word:
+                b = bytes([char])
+                if b.isalpha():
+                    options.append((b, b.swapcase()))
+                else:
+                    options.append((b,))
+            for combo in itertools.product(*options):
+                yield b''.join(combo)
         else:
-            mid_point = int(len(word)/2)
-            for right_half in self._capswap(word[mid_point:]):
-                for left_half in self._capswap(word[:mid_point]):
-                    yield left_half + right_half
+            options = []
+            for char in word:
+                if char.isalpha():
+                    options.append((char, char.swapcase()))
+                else:
+                    options.append((char,))
+            for combo in itertools.product(*options):
+                yield ''.join(combo)

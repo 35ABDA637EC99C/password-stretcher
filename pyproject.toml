@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "password-stretcher"
-version = "1.0.11"
+version = "1.0.12"
 description = "A deadly password mangler"
 authors = ["TheTechromancer", "35ABDA637EC99C"]
 license = "GPL-3.0"

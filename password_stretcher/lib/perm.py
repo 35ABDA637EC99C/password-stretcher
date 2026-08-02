@@ -26,7 +26,7 @@ class Perm(Mutator):
 
     def __len__(self):
 
-        length: int = len(self.input)
+        length = len(self.input)
 
         if self.perm_depth > 1:
             initial_length = len(self.input)
@@ -52,3 +52,4 @@ class Perm(Mutator):
                 yield word
                 if self.double:
                     yield word + word
+                    

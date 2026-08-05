@@ -1,9 +1,4 @@
-#!/usr/bin/env python3
-
-# by TheTechromancer
-
-
-class Mutator():
+class Mutator:
     '''
     base class for mutators like capswap, leet, and *pend
     '''

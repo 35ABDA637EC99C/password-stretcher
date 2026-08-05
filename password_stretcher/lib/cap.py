@@ -1,9 +1,9 @@
-#!/usr/bin/env python3
 
 # by TheTechromancer
 
-from password_stretcher.lib.mutator import Mutator
 import itertools
+
+from password_stretcher.lib.mutator import Mutator
 
 
 class Cap(Mutator):

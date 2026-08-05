@@ -2,22 +2,21 @@
 """Password Stretcher: A tool to generate large password lists from small input wordlists or website names."""
 # by TheTechromancer
 
+import argparse
 import os
 import sys
-import argparse
-from password_stretcher.lib.utils import ReadFiles, ReadSTDIN, human_to_int
+
 from password_stretcher.lib.errors import PasswordStretcherError
 from password_stretcher.lib.mangler import Mangler
 from password_stretcher.lib.policy import PasswordPolicy
-
+from password_stretcher.lib.utils import ReadFiles, ReadSTDIN, human_to_int
 
 
 def stretcher(options):
     """Main function to handle password stretching based on provided options."""
-    if options.minlength is not None and options.maxlength is not None:
-        if options.minlength > options.maxlength:
-            print('U WOT M8')
-            sys.exit(1)
+    if options.minlength is not None and options.maxlength is not None and options.minlength > options.maxlength:
+        print('U WOT M8')
+        sys.exit(1)
 
 
     policy = PasswordPolicy(
@@ -45,7 +44,7 @@ def stretcher(options):
     if any([mangler.leet, mangler.cap, mangler.pend]):
         sys.stderr.write('[+] Mutations allowed per word:\n')
         for mutator in mangler.mutators[1:]:
-            sys.stderr.write(f'       {str(mutator):<16}{mutator.limit:,}\n')
+            sys.stderr.write(f'       {mutator!s:<16}{mutator.limit:,}\n')
     if policy:
         sys.stderr.write('[+] Filtering based on policy, output size may be reduced\n')
 
@@ -53,13 +52,12 @@ def stretcher(options):
 
     bytes_written = 0
     wordcounter = 0
-    max_size = mangler.output_size if mangler.output_size else int(7)
+    max_size = mangler.output_size if mangler.output_size else 7
     output_buffer = []
     output_buffer_bytes = 0
     flush_threshold = 1_000_000
 
-    for mangled_word in mangler:
-        wordcounter += 1
+    for wordcounter, mangled_word in enumerate(mangler, start=1):
         if policy.meets_policy(mangled_word):
             if isinstance(mangled_word, bytes):
                 output_word = mangled_word
@@ -85,7 +83,7 @@ def stretcher(options):
             if output_buffer:
                 sys.stdout.buffer.write(b''.join(output_buffer))
             sys.stderr.write('\r[!] Reached the end. Quiting.\n')
-            exit(0)  # exit if no new words were written in the last second
+            sys.exit(0)  # exit if no new words were written in the last second
 
     if output_buffer:
         sys.stdout.buffer.write(b''.join(output_buffer))
@@ -119,7 +117,7 @@ def main():
         if isinstance(options.input, ReadSTDIN) and sys.stdin.isatty():
             parser.print_help()
             sys.stderr.write('\n\n[!] Please specify wordlist(s) or pipe to STDIN\n')
-            exit(2)
+            sys.exit(2)
         # If input is not ReadSTDIN, process as needed (removed read_uris call)
         # You may need to implement your own URI reading logic here if required.
 

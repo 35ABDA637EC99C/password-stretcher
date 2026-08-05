@@ -1,8 +1,5 @@
-#!/usr/bin/env python3
-
-# by TheTechromancer
-
 import itertools
+
 from password_stretcher.lib.mutator import Mutator
 
 

@@ -1,15 +1,15 @@
-#!/usr/bin/env python3
-
 # by TheTechromancer
 
+from functools import reduce
+
 from password_stretcher.lib.cap import Cap
+from password_stretcher.lib.deconstruct import Deconstruct
 from password_stretcher.lib.leet import Leet
 from password_stretcher.lib.pend import Pend
 from password_stretcher.lib.perm import Perm
-from password_stretcher.lib.deconstruct import Deconstruct
-from functools import reduce
 
-class Mangler():
+
+class Mangler:
 
     def __init__(self, _input, output_size=None, double=False, deconstruct=False, perm=0, leet=False, cap=False, capswap=False, pend=False, key=lambda x: x):
 
@@ -54,8 +54,7 @@ class Mangler():
         yields each mutated word
         '''
 
-        for word in self.mutators[-1]:
-            yield word
+        yield from self.mutators[-1]
 
 
     def __len__(self):

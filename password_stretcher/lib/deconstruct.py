@@ -1,14 +1,12 @@
-#!/usr/bin/env python3
-
-# by TheTechromancer
-
 import re
+from typing import ClassVar
+
 from password_stretcher.lib.mutator import Mutator
 
 
 class Deconstruct(Mutator):
 
-    word_regexes = [re.compile(r, re.I) for r in [
+    word_regexes: ClassVar[list[re.Pattern[bytes]]] = [re.compile(r, re.IGNORECASE) for r in [
         rb'\w+',
         rb'[0-9]+',
         rb'[\w0-9]+',
@@ -27,5 +25,4 @@ class Deconstruct(Mutator):
 
         yield word
         for r in self.word_regexes:
-            for m in r.findall(word):
-                yield m
+            yield from r.findall(word)

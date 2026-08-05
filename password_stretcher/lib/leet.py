@@ -1,8 +1,5 @@
-#!/usr/bin/env python3
-
-# by TheTechromancer
-
 import itertools
+
 from password_stretcher.lib.mutator import Mutator
 
 
@@ -53,8 +50,7 @@ class Leet(Mutator):
 
 
     def mutate(self, word):
-        for r in self._leet_fast(word, swap_values=self.leet_common):
-            yield r
+        yield from self._leet_fast(word, swap_values=self.leet_common)
 
 
     def _leet_fast(self, word, swap_values=None):
@@ -95,8 +91,7 @@ class Leet(Mutator):
         if len(word) == 1:
             yield word
             try:
-                for leet_char in swap_values[word]:
-                    yield leet_char
+                yield from swap_values[word]
             except KeyError:
                 pass
 

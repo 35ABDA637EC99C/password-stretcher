@@ -1,20 +1,15 @@
-#!/usr/bin/env python3
-
-# by TheTechromancer
-
-import sys
-import string
-import traceback
 import logging
+import string
+import sys
+import traceback
 from pathlib import Path
-from bs4 import UnicodeDammit
-from password_stretcher.lib.errors import InputListError
 
+from password_stretcher.lib.errors import InputListError
 
 logging.disable(logging.WARNING)
 
 
-class ReadFiles():
+class ReadFiles:
 
     def __init__(self, *filenames, binary=True):
 
@@ -26,7 +21,7 @@ class ReadFiles():
             yield from file
 
 
-class ReadFile():
+class ReadFile:
     """Reads lines from a file, handling encoding issues."""
     def __init__(self, filename, binary=True):
 
@@ -64,14 +59,14 @@ class ReadFile():
                 except UnicodeDecodeError as e:
                     if fucky_errors > 10000:
                         break
-                    for line in UnicodeDammit(e.object).unicode_markup.splitlines()[1:-1]:
+                    for line in e.object.decode('utf-8', errors='replace').splitlines():
                         yield line.rstrip(self.strip)
                         fucky_errors = 0
                     fucky_errors += 1
 
 
 
-class ReadSTDIN():
+class ReadSTDIN:
 
     def __init__(self, binary=True):
 
@@ -106,19 +101,19 @@ def int_to_human(i: int) -> str:
 
     sizes = ['', 'K', 'M', 'B', 'T']
     units: dict[str, int] = {}
-    count: int = 0
-    for size in sizes:
+    for count, size in enumerate(sizes):
         units[size] = pow(1000, count)
-        count += 1
+
+    value_num = float(i)
 
     for size in sizes:
-        if abs(i) < 1000.0:
+        if abs(value_num) < 1000.0:
             if size == sizes[0]:
-                i = str(int(i))
+                value = str(int(value_num))
             else:
-                i = '{:.2f}'.format(i)
-            return '{}{}'.format(i, size)
-        i /= 1000
+                value = f'{value_num:.2f}'
+            return f'{value}{size}'
+        value_num /= 1000
 
     raise ValueError
 
@@ -160,8 +155,8 @@ def bytes_to_human(_bytes) -> str:
             if size == sizes[0]:
                 _bytes = str(int(_bytes))
             else:
-                _bytes = '{:.2f}'.format(_bytes)
-            return '{}{}'.format(_bytes, size)
+                _bytes = f'{_bytes:.2f}'
+            return f'{_bytes}{size}'
         _bytes /= 1024
 
     raise ValueError
@@ -174,6 +169,6 @@ def thread_wrapper(target, *args, **kwargs):
         target(*args, **kwargs)
     except KeyboardInterrupt:
         pass
-    except (ValueError, IOError, RuntimeError):
+    except (OSError, ValueError, RuntimeError):
         traceback.print_exc()
         

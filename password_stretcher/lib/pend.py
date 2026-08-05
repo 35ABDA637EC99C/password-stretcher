@@ -1,9 +1,6 @@
-#!/usr/bin/env python3
-
-# by TheTechromancer
-
 import os
 from pathlib import Path
+
 from password_stretcher.lib.mutator import Mutator
 
 
@@ -42,7 +39,7 @@ class Pend(Mutator):
             for file in files:
                 if any(file.lower().endswith(x) for x in ['rule', 'rules']):
                     with open(rule_dir / file) as f:
-                        lines = [l.strip('\r\n') for l in f.readlines()]
+                        lines = [l.strip('\r\n') for l in f]
                         for line in lines:
                             try:
                                 rule = self.parse_rule(line)

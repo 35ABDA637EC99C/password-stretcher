@@ -14,7 +14,6 @@ password-stretcher = 'password_stretcher.stretcher:main'
 [tool.poetry.dependencies]
 python = "^3.12"
 requests = "^2.25.1"
-beautifulsoup4 = "^4.9.3"
 
 [tool.poetry.dev-dependencies]
 

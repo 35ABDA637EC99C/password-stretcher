@@ -3,11 +3,14 @@
 # This was adapted from the Password Statistical Analysis tool by Peter Kacherginsky
 # https://github.com/iphelix/pack
 
+from typing import ClassVar
+
+
 class PasswordPolicy:
 
-    charset_choices = ['numeric', 'loweralpha', 'upperalpha', 'special']
+    charset_choices: ClassVar[tuple[str, ...]] = ('numeric', 'loweralpha', 'upperalpha', 'special')
 
-    charset_flags = {
+    charset_flags: ClassVar[dict[int | str, str | int]] = {
         0b0001: 'numeric',
         0b0010: 'loweralpha',
         0b0100: 'upperalpha',
@@ -52,7 +55,7 @@ class PasswordPolicy:
                 password = str(password)[2:-1]
 
         #if pass_length is None or charset is None:
-        meets_policy, pass_length, charset, num_charsets, simplemask, advancedmask = self.analyze_password(password, calc_policy=False)
+        meets_policy, pass_length, charset, num_charsets, _simplemask, _advancedmask = self.analyze_password(password, calc_policy=False)
 
         meets_policy = False
         if (self.maxlength is None          or pass_length <= self.maxlength) and \
@@ -78,31 +81,31 @@ class PasswordPolicy:
                 charset |= 0b0010
                 if calc_policy:
                     advancedmask_string.append('?l')
-                    if not simplemask or not simplemask[-1] == 'Word':
+                    if not simplemask or simplemask[-1] != 'Word':
                         simplemask.append('Word')
 
             elif letter.isdigit():
                 charset |= 0b0001
                 if calc_policy:
                     advancedmask_string.append('?d')
-                    if not simplemask or not simplemask[-1] == 'Number':
+                    if not simplemask or simplemask[-1] != 'Number':
                         simplemask.append('Number')
 
             elif letter.isupper():
                 charset |= 0b0100
                 if calc_policy:
                     advancedmask_string.append('?u')
-                    if not simplemask or not simplemask[-1] == 'Word':
+                    if not simplemask or simplemask[-1] != 'Word':
                         simplemask.append('Word')
 
             else:
                 charset |= 0b1000
                 if calc_policy:
                     advancedmask_string.append('?s')
-                    if not simplemask or not simplemask[-1] == 'Symbol':
+                    if not simplemask or simplemask[-1] != 'Symbol':
                         simplemask.append('Symbol')
 
-        num_charsets = bin(charset).count('1')
+        num_charsets = (charset).bit_count()
         pass_length = len(password)
         meets_policy = None
         if calc_policy:
@@ -131,4 +134,4 @@ class PasswordPolicy:
 
     def __bool__(self):
 
-        return not all([_ is None for _ in [self.minlength, self.maxlength, self.mincharsets, self.required_charset, self.regex]])
+        return not all(_ is None for _ in [self.minlength, self.maxlength, self.mincharsets, self.required_charset, self.regex])

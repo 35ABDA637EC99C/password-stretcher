@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "password-stretcher"
-version = "1.0.12"
+version = "1.0.13"
 description = "A deadly password mangler"
 authors = ["TheTechromancer", "35ABDA637EC99C"]
 license = "GPL-3.0"
@@ -8,15 +8,6 @@ requires-python = ">=3.12"
 repository = "https://github.com/35ABDA637EC99C/password-stretcher"
 homepage = "https://github.com/35ABDA637EC99C/password-stretcher"
 
-[tool.poetry.scripts]
-password-stretcher = 'password_stretcher.stretcher:main'
-
-[tool.poetry.dependencies]
-python = "^3.12"
-requests = "^2.25.1"
-
-[tool.poetry.dev-dependencies]
-
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["setuptools >= 45.2.0"] # Have at least ubuntu 20.04
+build-backend = "setuptools.build_meta"

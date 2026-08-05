@@ -81,7 +81,7 @@ def stretcher(options):
     # Check if we should use parallel processing (enough words and multiple cores)
     num_workers = getattr(options, 'workers', None)
     if num_workers is None:
-        num_workers = cpu_count()
+        num_workers = max(1, cpu_count() - 2)
     
     use_parallel = num_workers > 1 and len(input_words) >= 1
     

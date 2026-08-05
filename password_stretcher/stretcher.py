@@ -4,10 +4,11 @@
 
 import argparse
 import os
-import psutil
 import sys
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from multiprocessing import cpu_count
+
+import psutil
 
 from password_stretcher.lib.errors import PasswordStretcherError
 from password_stretcher.lib.mangler import Mangler
@@ -19,7 +20,7 @@ def _get_available_memory():
     """Get available memory in bytes."""
     try:
         return psutil.virtual_memory().available
-    except Exception:
+    except Exception:  # noqa: BLE001
         # Fallback if psutil fails
         return 1024 * 1024 * 1024  # 1 GB default
 
@@ -169,7 +170,7 @@ def stretcher(options):
                 try:
                     count = future.result()
                     total_count += count
-                except Exception as e:
+                except Exception as e:  # noqa: BLE001
                     sys.stderr.write(f'[!] Worker error: {e}\n')
         
         sys.stdout.buffer.flush()

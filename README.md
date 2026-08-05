@@ -1,10 +1,10 @@
 ![password-stretcher](https://user-images.githubusercontent.com/20261699/117364575-14a5d980-ae8c-11eb-815d-32827cc5297b.png)
 
-**Generate disgusting quantities of passwords from websites, files, or stdin.** Compliments [password-smelter](https://github.com/thetechromancer/password-smelter).
+
 
 ## Installation
 ~~~
-$ pip install password-stretcher
+$ uv tool install git+https://github.com/35ABDA637EC99C/password-stretcher.git
 ~~~
 
 ## Basics:
@@ -119,14 +119,5 @@ mangling options:
 password complexity filters:
   --minlength 8         minimum password length
   --maxlength 8         maximum password length
-  --mincharsets 3       must have this many character sets
-  --charsets {numeric,loweralpha,upperalpha,special} [{numeric,loweralpha,upperalpha,special} ...]
-                        must include these character sets
-  --regex '$[a-z]*^'    custom regex
 
-spider options:
-  --spider-depth SPIDER_DEPTH
-                        maximum website spider depth (default: 1)
-  --user-agent USER_AGENT
-                        user-agent for web spider
 ~~~

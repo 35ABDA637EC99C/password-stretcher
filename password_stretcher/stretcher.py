@@ -4,6 +4,7 @@
 
 import argparse
 import os
+import psutil
 import sys
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from multiprocessing import cpu_count
@@ -14,12 +15,22 @@ from password_stretcher.lib.policy import PasswordPolicy
 from password_stretcher.lib.utils import ReadFiles, ReadSTDIN, human_to_int
 
 
+def _get_available_memory():
+    """Get available memory in bytes."""
+    try:
+        return psutil.virtual_memory().available
+    except Exception:
+        # Fallback if psutil fails
+        return 1024 * 1024 * 1024  # 1 GB default
+
+
 def _process_chunk(args):
-    """Worker function to process a chunk of input words.
+    """Worker function to process a chunk of input words with memory limit.
     
-    Returns a list of bytes (mangled words with newlines) that meet policy.
+    Writes results directly to stdout with memory-aware batching.
+    Returns number of results processed.
     """
-    chunk_words, options_dict, output_size = args
+    chunk_words, options_dict, output_size, max_chunk_output_bytes = args
     
     # Reconstruct options-like object from dict
     class Options:
@@ -47,7 +58,11 @@ def _process_chunk(args):
         pend=options.pend,
     )
     
+    # Process and write ALL results with memory-aware batching
     results = []
+    current_batch_bytes = 0
+    count = 0
+    
     for mangled_word in mangler:
         if policy.meets_policy(mangled_word):
             if isinstance(mangled_word, bytes):
@@ -56,9 +71,25 @@ def _process_chunk(args):
                 output_word = mangled_word.encode('utf-8', errors='replace')
             else:
                 output_word = str(mangled_word).encode('utf-8', errors='replace')
-            results.append(output_word + b'\n')
+            
+            line = output_word + b'\n'
+            line_len = len(line)
+            
+            results.append(line)
+            current_batch_bytes += line_len
+            count += 1
+            
+            # Flush batch if it exceeds memory limit
+            if current_batch_bytes >= max_chunk_output_bytes:
+                sys.stdout.buffer.write(b''.join(results))
+                results = []
+                current_batch_bytes = 0
     
-    return results
+    # Write remaining results for this chunk
+    if results:
+        sys.stdout.buffer.write(b''.join(results))
+    
+    return count
 
 
 def stretcher(options):
@@ -87,8 +118,6 @@ def stretcher(options):
     
     if use_parallel and num_workers > 1:
         sys.stderr.write(f' read {len(input_words):,} words\n')
-        sys.stderr.write(f'[+] Using {num_workers} parallel workers\n')
-        
         # Split input into chunks
         chunk_size = max(1, len(input_words) // num_workers)
         chunks = [
@@ -115,32 +144,34 @@ def stretcher(options):
             'pend': options.pend,
         }
         
+        # Get available memory and set limits
+        available_memory = _get_available_memory()
+        memory_limit = available_memory // 2  # Use at most half of available memory
+        memory_limit = max(memory_limit, 100 * 1024 * 1024)  # Ensure at least 100MB
+        
+        # Calculate max bytes per worker batch
+        max_worker_batch = max(10 * 1024 * 1024, memory_limit // (num_workers * 2))
+        max_worker_batch = min(max_worker_batch, 50 * 1024 * 1024)  # Cap at 50MB
+        
+        sys.stderr.write(f'[+] Using {num_workers} parallel workers (batch limit: ~{max_worker_batch // 1024 // 1024}MB)\n')
+        
         # Submit chunks to worker pool
-        flush_threshold = 1_000_000
-        output_buffer = []
-        output_buffer_bytes = 0
+        # Workers write directly to stdout, so we just wait for completion
+        total_count = 0
         
         with ProcessPoolExecutor(max_workers=num_workers) as executor:
             futures = [
-                executor.submit(_process_chunk, (chunk, options_dict, chunk_output_size))
+                executor.submit(_process_chunk, (chunk, options_dict, chunk_output_size, max_worker_batch))
                 for chunk in chunks
             ]
             
             for future in as_completed(futures):
-                results = future.result()
-                for line in results:
-                    output_buffer.append(line)
-                    output_buffer_bytes += len(line)
-                    
-                    if output_buffer_bytes >= flush_threshold:
-                        sys.stdout.buffer.write(b''.join(output_buffer))
-                        output_buffer = []
-                        output_buffer_bytes = 0
-
+                try:
+                    count = future.result()
+                    total_count += count
+                except Exception as e:
+                    sys.stderr.write(f'[!] Worker error: {e}\n')
         
-        # Flush remaining output
-        if output_buffer:
-            sys.stdout.buffer.write(b''.join(output_buffer))
         sys.stdout.buffer.flush()
         
     else:

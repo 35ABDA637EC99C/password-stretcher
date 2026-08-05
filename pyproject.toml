@@ -11,3 +11,6 @@ homepage = "https://github.com/35ABDA637EC99C/password-stretcher"
 [build-system]
 requires = ["setuptools >= 45.2.0"] # Have at least ubuntu 20.04
 build-backend = "setuptools.build_meta"
+
+[project.scripts]
+password-stretcher = "stretcher.__main__:main"

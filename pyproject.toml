@@ -1,16 +1,17 @@
-[tool.poetry]
+[project]
 name = "password-stretcher"
 version = "1.0.13"
-description = "A deadly password mangler"
-authors = ["TheTechromancer", "35ABDA637EC99C"]
+description = "A deadly password mangler, forked from TheTechromancer"
+authors = [{name = "35ABDA637EC99C"}]
 license = "GPL-3.0"
 requires-python = ">=3.12"
-repository = "https://github.com/35ABDA637EC99C/password-stretcher"
-homepage = "https://github.com/35ABDA637EC99C/password-stretcher"
+
+[project.urls]
+Repository = "https://github.com/35ABDA637EC99C/password-stretcher"
 
 [build-system]
 requires = ["setuptools >= 45.2.0"] # Have at least ubuntu 20.04
 build-backend = "setuptools.build_meta"
 
 [project.scripts]
-password-stretcher = "stretcher.__main__:main"
+password-stretcher = "password_stretcher.stretcher:main"

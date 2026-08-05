@@ -54,17 +54,27 @@ class PasswordPolicy:
             except UnicodeError:
                 password = str(password)[2:-1]
 
-        #if pass_length is None or charset is None:
-        meets_policy, pass_length, charset, num_charsets, _simplemask, _advancedmask = self.analyze_password(password, calc_policy=False)
-
-        meets_policy = False
-        if (self.maxlength is None          or pass_length <= self.maxlength) and \
-           (self.minlength is None          or pass_length >= self.minlength) and \
-           (self.regex is None              or self.regex.match(password)) and \
-           (self.mincharsets is None        or num_charsets >= self.mincharsets) and \
-           (self.required_charset is None   or self.required_charset & charset == self.required_charset):
-           meets_policy = True
-        return meets_policy
+        # Compute charset and length directly instead of calling analyze_password
+        if charset is None or pass_length is None:
+            charset = 0b0000
+            for letter in password:
+                if letter.islower():
+                    charset |= 0b0010
+                elif letter.isdigit():
+                    charset |= 0b0001
+                elif letter.isupper():
+                    charset |= 0b0100
+                else:
+                    charset |= 0b1000
+            pass_length = len(password)
+        
+        num_charsets = charset.bit_count()
+        
+        return (self.maxlength is None or pass_length <= self.maxlength) and \
+               (self.minlength is None or pass_length >= self.minlength) and \
+               (self.regex is None or self.regex.match(password)) and \
+               (self.mincharsets is None or num_charsets >= self.mincharsets) and \
+               (self.required_charset is None or self.required_charset & charset == self.required_charset)
 
 
     def analyze_password(self, password, calc_policy=True):

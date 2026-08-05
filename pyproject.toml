@@ -1,6 +1,6 @@
 [project]
 name = "password-stretcher"
-version = "1.0.13"
+version = "1.0.14"
 description = "A deadly password mangler, forked from TheTechromancer"
 authors = [{name = "35ABDA637EC99C"}]
 license = "GPL-3.0"

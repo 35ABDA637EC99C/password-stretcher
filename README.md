@@ -71,23 +71,12 @@ normalnormal
 ...
 ~~~
 
-## Example 2: Generate 10 million passwords from a website
-~~~
-$ password-stretcher -i 'https://wikipedia.org' --leet --limit 10M > wordlist.txt
-[+] Spidered 291 pages
-[+] Reading input wordlist... read 172,629 words.
-[*] Output capped at 10,000,000 words
-[+] Mutations allowed per word:
-     - leet:           57
-[+] 9,792,383 words written (152.36MB)
-~~~
-
-## Example 3: Generate passwords from a codebase
+## Example 2: Generate passwords from a codebase
 ~~~
 $ egrep -h -RIio '\b[a-z]+\b' 2>/dev/null | password-stretcher --cap > wordlist.txt
 ~~~
 
-## Example 4: Pair with hashcat rules because yes
+## Example 3: Pair with hashcat rules because yes
 ~~~
 $ echo password | password-stretcher --capswap --leet | hashcat -r OneRuleToRuleThemAll.rule ...
 ~~~
@@ -95,9 +84,7 @@ $ echo password | password-stretcher --capswap --leet | hashcat -r OneRuleToRule
 ## Usage:
 ~~~
 $ password-stretcher --help
-usage: password-stretcher [-h] [-i  [...]] [--limit LIMIT] [-L] [-c] [-C] [-p] [-dd] [-P INT] [--minlength 8] [--maxlength 8] [--mincharsets 3]
-                          [--charsets {numeric,loweralpha,upperalpha,special} [{numeric,loweralpha,upperalpha,special} ...]] [--regex '$[a-z]*^'] [--spider-depth SPIDER_DEPTH]
-                          [--user-agent USER_AGENT]
+usage: password-stretcher [-h] [-i  [...]] [--limit LIMIT] [-L] [-c] [-C] [-p] [-dd] [-P INT] [--minlength 8] [--maxlength 8]
 
 FETCH THE PASSWORD STRETCHER
 

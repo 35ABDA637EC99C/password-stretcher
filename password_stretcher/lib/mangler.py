@@ -11,7 +11,7 @@ from password_stretcher.lib.perm import Perm
 
 class Mangler:
 
-    def __init__(self, _input, output_size=None, double=False, deconstruct=False, perm=0, leet=False, cap=False, capswap=False, pend=False, key=lambda x: x):
+    def __init__(self, _input, output_size=None, deconstruct=False, perm=0, leet=False, cap=False, capswap=False, pend=False, key=lambda x: x):
 
         # load input list into memory and deduplicate
         self.input = set(_input)
@@ -29,10 +29,9 @@ class Mangler:
         self.leet       = leet
         self.capswap    = capswap
         self.cap        = cap or capswap
-        self.double     = double
         self.pend       = pend
 
-        self.mutators = [Perm(self.input, double=double, perm_depth=perm)]
+        self.mutators = [Perm(self.input, perm_depth=perm)]
 
         if self.leet:
             self.mutators.append(Leet(self.mutators[-1]))

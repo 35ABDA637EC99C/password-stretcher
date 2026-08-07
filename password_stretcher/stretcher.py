@@ -136,7 +136,6 @@ def stretcher(options):
         options_dict = {
             'minlength': options.minlength,
             'maxlength': options.maxlength,
-            'double': options.double,
             'deconstruct': options.deconstruct,
             'permutations': options.permutations,
             'leet': options.leet,
@@ -200,7 +199,7 @@ def stretcher(options):
         if policy:
             sys.stderr.write('[+] Filtering based on policy, output size may be reduced\n')
 
-        #sys.stderr.write(f'[+] Estimated output: {len(mangler):,} words\n')
+        sys.stderr.write(f'[+] Estimated output: {len(mangler):,} words\n')
 
         bytes_written = 0
         wordcounter = 0
@@ -253,7 +252,6 @@ def main():
     mangling.add_argument('-C', '--capswap', action='store_true', help='all possible case combinations')
     mangling.add_argument('-p', '--pend', action='store_true', help='append/prepend common digits & special characters')
     mangling.add_argument('-d', '--deconstruct', action='store_true', help='extract smaller words from input list')
-    mangling.add_argument('-dd', '--double', action='store_true', help='double each word (e.g. "Pass" --> "PassPass")')
     mangling.add_argument('-P', '--permutations',type=int, default=1, help='max permutation depth (careful! massive output)', metavar='INT')
     filters = argparse.ArgumentParser.add_argument_group(parser, 'password complexity filters')
     filters.add_argument('--minlength', type=int, metavar='8', help='minimum password length')

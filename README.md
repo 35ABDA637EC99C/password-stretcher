@@ -99,7 +99,6 @@ mangling options:
   -c, --cap             common upper/lowercase variations
   -C, --capswap         all possible case combinations
   -p, --pend            append/prepend common digits & special characters
-  -dd, --double         double each word (e.g. "Pass" --> "PassPass")
   -P INT, --permutations INT
                         max permutation depth (careful! massive output)
 

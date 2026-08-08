@@ -50,7 +50,6 @@ def _process_chunk(args):
     mangler = Mangler(
         _input=chunk_words,
         output_size=output_size,
-        double=options.double,
         deconstruct=options.deconstruct,
         perm=options.permutations,
         leet=options.leet,
@@ -179,7 +178,6 @@ def stretcher(options):
         mangler = Mangler(
             _input=input_words,
             output_size=options.limit,
-            double=options.double,
             deconstruct=options.deconstruct,
             perm=options.permutations,
             leet=options.leet,

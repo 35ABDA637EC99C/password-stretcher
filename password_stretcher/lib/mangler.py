@@ -3,7 +3,6 @@
 from functools import reduce
 
 from password_stretcher.lib.cap import Cap
-from password_stretcher.lib.deconstruct import Deconstruct
 from password_stretcher.lib.leet import Leet
 from password_stretcher.lib.pend import Pend
 from password_stretcher.lib.perm import Perm
@@ -15,9 +14,6 @@ class Mangler:
 
         # load input list into memory and deduplicate
         self.input = set(_input)
-
-        if deconstruct:
-            self.input = set(Deconstruct(self.input))
 
         if cap and not capswap:
             self.input = set(Cap(self.input))

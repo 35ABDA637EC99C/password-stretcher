@@ -1,0 +1,11 @@
+Metadata-Version: 2.4
+Name: password-stretcher
+Version: 2.0.5
+Summary: A deadly password mangler, forked from TheTechromancer
+Author: 35ABDA637EC99C
+License-Expression: GPL-3.0
+Project-URL: Repository, https://github.com/35ABDA637EC99C/password-stretcher
+Requires-Python: >=3.12
+License-File: LICENSE
+Requires-Dist: psutil<=7.2.2
+Dynamic: license-file

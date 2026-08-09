@@ -98,9 +98,6 @@ mangling options:
   -L, --leet            "leetspeak" mutations
   -c, --cap             common upper/lowercase variations
   -C, --capswap         all possible case combinations
-  -p, --pend            append/prepend common digits & special characters
-  -P INT, --permutations INT
-                        max permutation depth (careful! massive output)
 
 password complexity filters:
   --minlength 8         minimum password length

@@ -4,6 +4,7 @@ from functools import reduce
 
 from password_stretcher.lib.cap import Cap
 from password_stretcher.lib.leet import Leet
+from password_stretcher.lib.mutator import Mutator
 
 
 class Mangler:
@@ -24,6 +25,7 @@ class Mangler:
         self.cap        = cap or capswap
         self.pend       = pend
 
+        self.mutators = [Mutator(self.input)]
 
         if self.leet:
             self.mutators.append(Leet(self.mutators[-1]))

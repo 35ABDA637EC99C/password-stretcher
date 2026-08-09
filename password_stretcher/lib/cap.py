@@ -30,6 +30,10 @@ class Cap(Mutator):
 
     def mutate(self, word: str):
 
+        # Convert bytes to string to ensure we only work with strings
+        if isinstance(word, bytes):
+            word = word.decode('utf-8', errors='replace')
+
         # always yield the most likely candidates first
         results = []
         for r in [word, word.lower(), word.upper(), word.swapcase(), word.capitalize(), word.title()]:

@@ -33,7 +33,7 @@ class ReadFile:
             self.strip = '\r\n'
 
         if not self.filename.exists() or self.filename.is_dir():
-            print(f'Cannot find the file {self.filename}')
+            sys.stderr.write(f'Cannot find the file {self.filename}\n')            
             sys.exit(1)
 
 

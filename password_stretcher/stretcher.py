@@ -53,7 +53,6 @@ def _process_chunk(args):
         leet=options.leet,
         cap=options.cap,
         capswap=options.capswap,
-        pend=options.pend,
     )
     
     # Process and write ALL results with memory-aware batching
@@ -137,7 +136,6 @@ def stretcher(options):
             'leet': options.leet,
             'cap': options.cap,
             'capswap': options.capswap,
-            'pend': options.pend,
         }
         
         # Get available memory and set limits
@@ -179,7 +177,6 @@ def stretcher(options):
             leet=options.leet,
             cap=options.cap,
             capswap=options.capswap,
-            pend=options.pend,
         )
         sys.stderr.write(f' read {len(mangler.input):,} words {"(after basic cap mutations)" if (options.cap and not options.capswap) else ""}\n')
         if options.permutations > 1:
@@ -244,15 +241,13 @@ def main():
     mangling.add_argument('-L', '--leet', action='store_true', help='"leetspeak" mutations')
     mangling.add_argument('-c', '--cap', action='store_true', help='common upper/lowercase variations')
     mangling.add_argument('-C', '--capswap', action='store_true', help='all possible case combinations')
-    mangling.add_argument('-p', '--pend', action='store_true', help='append/prepend common digits & special characters')
     mangling.add_argument('-P', '--permutations',type=int, default=1, help='max permutation depth (careful! massive output)', metavar='INT')
     filters = argparse.ArgumentParser.add_argument_group(parser, 'password complexity filters')
     filters.add_argument('--minlength', type=int, metavar='8', help='minimum password length')
     filters.add_argument('--maxlength', type=int, metavar='16', help='maximum password length')
     
     perf = argparse.ArgumentParser.add_argument_group(parser, 'performance options')
-    perf.add_argument('-w', '--workers', type=int, default=None, metavar='N',
-                       help='number of parallel workers (default: CPU count)')
+    perf.add_argument('-w', '--workers', type=int, default=None, metavar='N', help='number of parallel workers (default: CPU count)')
 
     try:
 

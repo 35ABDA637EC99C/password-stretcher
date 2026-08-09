@@ -4,8 +4,6 @@ import sys
 import traceback
 from pathlib import Path
 
-from password_stretcher.lib.errors import InputListError
-
 logging.disable(logging.WARNING)
 
 
@@ -35,7 +33,8 @@ class ReadFile:
             self.strip = '\r\n'
 
         if not self.filename.exists() or self.filename.is_dir():
-            raise InputListError(f'Cannot find the file {self.filename}')
+            print(f'Cannot find the file {self.filename}')
+            sys.exit(1)
 
 
 

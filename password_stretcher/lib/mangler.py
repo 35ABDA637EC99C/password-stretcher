@@ -10,7 +10,7 @@ from password_stretcher.lib.perm import Perm
 
 class Mangler:
 
-    def __init__(self, _input, output_size=None, deconstruct=False, perm=0, leet=False, cap=False, capswap=False, pend=False, key=lambda x: x):
+    def __init__(self, _input, output_size=None, perm=0, leet=False, cap=False, capswap=False, pend=False, key=lambda x: x):
 
         # load input list into memory and deduplicate
         self.input = set(_input)

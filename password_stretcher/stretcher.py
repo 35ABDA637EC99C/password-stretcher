@@ -10,7 +10,6 @@ from multiprocessing import cpu_count
 
 import psutil
 
-from password_stretcher.lib.errors import PasswordStretcherError
 from password_stretcher.lib.mangler import Mangler
 from password_stretcher.lib.policy import PasswordPolicy
 from password_stretcher.lib.utils import ReadFiles, ReadSTDIN, human_to_int
@@ -279,7 +278,7 @@ def main():
         devnull = os.open(os.devnull, os.O_WRONLY)
         os.dup2(devnull, sys.stdout.fileno())
         sys.exit(1)  # Python exits with error code 1 on EPIPE
-    except (PasswordStretcherError, AssertionError) as e:
+    except AssertionError as e:
         sys.stderr.write(f'\n[!] {e}\n')
         sys.exit(1)
     except argparse.ArgumentError:

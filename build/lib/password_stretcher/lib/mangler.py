@@ -4,12 +4,11 @@ from functools import reduce
 
 from password_stretcher.lib.cap import Cap
 from password_stretcher.lib.leet import Leet
-from password_stretcher.lib.perm import Perm
 
 
 class Mangler:
 
-    def __init__(self, _input, output_size=None, perm=0, leet=False, cap=False, capswap=False, pend=False, key=lambda x: x):
+    def __init__(self, _input, output_size=None, leet=False, cap=False, capswap=False, pend=False, key=lambda x: x):
 
         # load input list into memory and deduplicate
         self.input = set(_input)
@@ -20,13 +19,11 @@ class Mangler:
         self.input = list(self.input)
         self.input.sort(key=lambda x: len(x))
 
-        self.perm_depth = perm
         self.leet       = leet
         self.capswap    = capswap
         self.cap        = cap or capswap
         self.pend       = pend
 
-        self.mutators = [Perm(self.input, perm_depth=perm)]
 
         if self.leet:
             self.mutators.append(Leet(self.mutators[-1]))

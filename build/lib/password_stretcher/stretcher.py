@@ -49,7 +49,6 @@ def _process_chunk(args):
     mangler = Mangler(
         _input=chunk_words,
         output_size=output_size,
-        perm=options.permutations,
         leet=options.leet,
         cap=options.cap,
         capswap=options.capswap,
@@ -132,7 +131,6 @@ def stretcher(options):
         options_dict = {
             'minlength': options.minlength,
             'maxlength': options.maxlength,
-            'permutations': options.permutations,
             'leet': options.leet,
             'cap': options.cap,
             'capswap': options.capswap,
@@ -173,16 +171,12 @@ def stretcher(options):
         mangler = Mangler(
             _input=input_words,
             output_size=options.limit,
-            perm=options.permutations,
             leet=options.leet,
             cap=options.cap,
             capswap=options.capswap,
         )
         sys.stderr.write(f' read {len(mangler.input):,} words {"(after basic cap mutations)" if (options.cap and not options.capswap) else ""}\n')
-        if options.permutations > 1:
-            sys.stderr.write(f'[*] Input wordlist after permutations: {len(mangler.mutators[0]):,}\n')
-        else:
-            sys.stderr.write(f'[*] Output capped at {mangler.output_size:,} words\n')
+        sys.stderr.write(f'[*] Output capped at {mangler.output_size:,} words\n')
         if any([mangler.leet, mangler.cap, mangler.pend]):
             sys.stderr.write('[+] Mutations allowed per word:\n')
             for mutator in mangler.mutators[1:]:
@@ -241,7 +235,6 @@ def main():
     mangling.add_argument('-L', '--leet', action='store_true', help='"leetspeak" mutations')
     mangling.add_argument('-c', '--cap', action='store_true', help='common upper/lowercase variations')
     mangling.add_argument('-C', '--capswap', action='store_true', help='all possible case combinations')
-    mangling.add_argument('-P', '--permutations',type=int, default=1, help='max permutation depth (careful! massive output)', metavar='INT')
     filters = argparse.ArgumentParser.add_argument_group(parser, 'password complexity filters')
     filters.add_argument('--minlength', type=int, metavar='8', help='minimum password length')
     filters.add_argument('--maxlength', type=int, metavar='16', help='maximum password length')

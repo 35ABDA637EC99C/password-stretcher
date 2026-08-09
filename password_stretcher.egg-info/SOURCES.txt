@@ -13,6 +13,5 @@ password_stretcher/lib/cap.py
 password_stretcher/lib/leet.py
 password_stretcher/lib/mangler.py
 password_stretcher/lib/mutator.py
-password_stretcher/lib/perm.py
 password_stretcher/lib/policy.py
 password_stretcher/lib/utils.py
